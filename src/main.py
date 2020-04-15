@@ -5,7 +5,7 @@ import time
 import sys
 
 # initializing display
-screen = pygame.display.set_mode((500, 400))
+screen = pygame.display.set_mode((800, 600))
 
 # global variables
 white = ((255, 255, 255))
@@ -13,6 +13,7 @@ black = ((0, 0, 0))
 red = ((255, 0, 0))
 green = ((0, 255, 0))
 blue = ((0, 0, 255))
+clock = pygame.time.Clock()
 
 # spriteGroups
 bubble_group = pygame.sprite.Group()
@@ -20,7 +21,7 @@ bubble_group = pygame.sprite.Group()
 class BarItem(pygame.sprite.Sprite):
 	def __init__(self, height, color, x, y):
 		pygame.sprite.Sprite.__init__(self)
-		self.image = pygame.Surface((10, height))
+		self.image = pygame.Surface((5, height))
 		self.image.fill(color)
 		self.rect = self.image.get_rect()
 		self.x = x
@@ -32,12 +33,13 @@ class BarItem(pygame.sprite.Sprite):
 
 class drawBubbleSort():
 	def __init__(self):
-		self.items = [random.randint(0, 1000) for i in range(10)]
+		self.items = [random.randint(0, 500) for i in range(10)]
 		self.color = green
 		self.surfaces = []
 		self.x = []
 		self.y = []
 		self.rect = None
+		self.timer = 0
 
 	def sort(self):
 		length = len(self.items)
@@ -45,11 +47,16 @@ class drawBubbleSort():
 			swapped = f=False
 
 			for j in range(0, length-1):
+				self.timer = 0
 				if self.items[j] > self.items[j+1]:
 					self.items[j], self.items[j+1] = self.items[j+1], self.items[j]
 					for i in self.items:
-						bubble_group.add(BarItem(i, self.color, len(bubble_group)*10, 100))
+						bubble_group.add(BarItem(i, self.color, len(bubble_group)*10, 600-i))
 					swapped = True
+					while self.timer < 30:
+						self.timer += 1
+						print(self.timer)
+					#bubble_group.empty()
 			if not swapped:
 				break
 
@@ -77,3 +84,5 @@ while running:
 
 	# updating display
 	pygame.display.update()
+
+	#clock.tick(60)
